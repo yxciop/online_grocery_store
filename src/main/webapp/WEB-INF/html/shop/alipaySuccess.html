@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<base th:href="@{/}">
+<head>
+    <meta charset="UTF-8">
+    <title>支付成功</title>
+</head>
+<script>
+    window.onload=function () {
+        setTimeout(tiaozhuan(),1000);
+        function  tiaozhuan(){
+            window.location.href="/buyer/orderAdmin";
+        }
+    };
+</script>
+<body>
+<h1 style="color: green;">购买成功</h1>
+<table>
+    <tr>
+        <td th:text="'订单编号:'+${out_trade_no}"></td>
+    </tr>
+    <tr>
+        <td th:text="'支付宝交易号: '+${trade_no}"></td>
+    </tr>
+    <tr>
+        <td th:text="'实付金额: '+${total_amount}"></td>
+    </tr>
+</table>
+
+</body>
+</html>

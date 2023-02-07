@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<base th:href="@{/}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商家商品显示页面</title>
+    <link   rel="stylesheet" href="/static/css/seller/material-design-iconic-font.css" />
+    <link   rel="stylesheet" href="/static/css/seller/jside-menu.css"/>
+    <link   rel="stylesheet" href="/static/css/seller/demo-only.css" />
+    <link   rel="stylesheet" href="/static/css/seller/productlist.css">
+    <link   rel="stylesheet" href="/static/css/common/bootstrap.min.css" />
+    <script src="/static/js/common/jquery.min.js"></script>
+    <script src="/static/js/common/jquery.jside.menu.js"></script>
+    <script src="/static/js/seller/nav.js"></script>
+    <script src="/static/js/seller/productlist.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <menu class="menubar">
+        <menuitem>
+            <button class="menu-trigger"> </button>
+        </menuitem>
+        <menuitem class="logo" title="Your Logo Goes Here">
+            欢迎<span th:text="${session.seller.username}"></span>商家<a href="/seller/logout">退出</a>
+        </menuitem>
+    </menu>
+    <nav th:replace="html/seller/leftnav :: leftnav"></nav>
+    <main>
+        <article>
+            <div th:class="theme-tray">
+                <table cellspacing="1"　cellpadding="2" class="table">
+                    <thead>
+                        <tr class="row">
+                            <th scope="col" class="col-lg-3 col-md-4 col-6">图片</th>
+                            <th scope="col" class="col-lg-3 col-md-4 col-6">标题</th>
+                            <th scope="col" class="col-lg-3 col-md-4 col-6">价格</th>
+                            <th scope="col" class="col-lg-3 col-md-4 col-6">库存量</th>
+                            <th scope="col" class="col-lg-3 col-md-4 col-6">状态</th>
+                            <th scope="col" class="col-lg-3 col-md-4 col-6">销量</th>
+                            <th scope="col" class="col-lg-3 col-md-4 col-6">更新时间</th>
+                            <th scope="col" class="col-lg-3 col-md-4 col-6">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody th:if="${pageInfo.list}!=null">
+                        <tr th:each="pro:${pageInfo.list}" class="row">
+                            <td class="col-lg-3 col-md-4  col-sm-6 col-6"><img th:src="${pro.imgPath}"/></td>
+                            <td th:text="${pro.title}" class="col-lg-3 col-md-4  col-6"></td>
+                            <td th:text="${pro.price}"  class="col-lg-3 col-md-4 col-6"></td>
+                            <td th:text="${pro.stock}"  class="col-lg-3 col-md-4 col-6"></td>
+                            <td th:text="${pro.status}"  class="col-lg-3 col-md-4 col-6"></td>
+                            <td th:text="${pro.soldCount}"  class="col-lg-3 col-md-4 col-6"></td>
+                            <td th:text="${#dates.format(pro.modifyTime, 'yyyy-MM-dd')}"  class="col-lg-3 col-md-4 col-6"></td>
+                            <td class="col-lg-3 col-md-4 col-6"><button class="btn btn-success" th:onclick="del([[${pro.id}]])">删除</button><button class="btn btn-success" th:onclick="update([[${pro.id}]])">修改</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <ul class="pagination">
+                    <li th:if="${pageInfo.hasPreviousPage}" th:class="page-item">
+                        <a th:href="'/seller/showProduct?pageNum=1'" th:class="page-link">首页</a>
+                    </li>
+
+                    <li class="prev" th:if="${pageInfo.hasPreviousPage}" th:class="page-item">
+                        <a th:href="'/seller/showProduct?pageNum='+${pageInfo.prePage}" th:class="page-link">
+                            前一页
+                        </a>
+                    </li>
+                    <li th:each="nav:${pageInfo.navigatepageNums}" th:class="page-item" th:name="pages">
+                        <a th:href="'/seller/showProduct?pageNum='+${nav}" th:text="${nav}"  th:class="page-link"></a>
+                    </li>
+
+                    <li class="next" th:if="${pageInfo.hasNextPage}" th:class="page-item">
+                        <a th:href="'/seller/showProduct?pageNum='+${pageInfo.nextPage}" th:class="page-link">
+                            后一页
+                        </a>
+                    </li>
+
+                    <li class="page-item">
+                        <a th:href="'/seller/showProduct?pageNum='+${pageInfo.pages}" class="page-link">尾页</a>
+                    </li>
+                </ul>
+            </div>
+        </article>
+    </main>
+</div>
+</body>
+</html>

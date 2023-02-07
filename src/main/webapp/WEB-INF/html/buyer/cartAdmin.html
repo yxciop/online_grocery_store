@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<base th:href="@{/}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[[${session.buyer.username}]]购物车管理界面</title>
+    <link   rel="stylesheet" href="/static/css/buyer/cartAdmin.css"/>
+    <link   rel="stylesheet" href="/static/css/common/bootstrap.min.css"/>
+    <script src="/static/js/common/jquery.min.js"></script>
+    <script src="/static/js/buyer/etao.js"></script>
+    <script src="/static/js/buyer/cartAdmin.js"></script>
+</head>
+<body>
+  <div class="container">
+      <h2>[[${session.buyer.username}]]购物车</h2>
+      <input type="hidden" id="buyerId" th:value="${session.buyer.id}">
+      <form id="orderList">
+          <input type="hidden" name="total" value="">
+          <input type="hidden" name="idArray" value="">
+      </form>
+      <div class="cart-wrap">
+          <table id="cartTable" class="cart table table-hover">
+              <tbody id="bok">
+              </tbody>
+          </table>
+          <div class="row">
+              <div class="col-md-12 col-lg-12 col-sm-12">
+                  <div class="cart-summary">
+                      <div style="margin-left: 2rem;" class="pull-right">
+                          <a onclick="buy()"
+                             id="btn_settlement" type="button" class="btn btn-primary">去结算</a>
+                      </div>
+                      <div style="margin-left: 1rem; margin-top: 0.4rem;" class="pull-right total">
+                          <label>金额合计:<span id="priceTotal" class="price-total large-bold-red">0.00</span></label>
+                      </div>
+                      <div style="margin-top: 4px;" class="pull-right">
+                          <label>您选择了<span id="itemCount" class="large-bold-red" style="margin: 0 4px;"></span>种商品，共计<span id="qtyCount" class="large-bold-red" style="margin: 0 4px;"></span>件
+                          </label>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</body>
+</html>

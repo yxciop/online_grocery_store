@@ -1,0 +1,14 @@
+tr{
+    border-bottom: 2px solid red;
+}
+.checkWindow{
+    width: 300px;
+    height: 500px;
+    min-height: 350px;
+    background-color: white;
+    position: absolute;
+    left: calc(50% - 150px);
+    z-index: 300;
+    display: none;
+    overflow: auto;
+}

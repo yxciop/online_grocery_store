@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<base th:href="@{/}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商城主页</title>
+    <link rel="stylesheet" href='/static/css/shop/all.min.css'>
+    <link rel="stylesheet" href='/static/css/common/bootstrap.min.css'>
+    <link rel="stylesheet" href='/static/css/shop/shop-list.css'>
+    <script src="/static/js/common/jquery.min.js"></script>
+    <script src="/static/js/common/bootstrap.min.js"></script>
+    <script src="/static/js/common/verifyData.js"></script>
+    <script src="/static/js/shop/shop-list.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
+</head>
+<body>
+<input type="hidden" id="username" th:value="${session.buyer.username}" th:if="${session.buyer}!=null">
+<div class="container-fluid">
+    <div class="container">
+        <nav class="navbar navbar-expand-sm navbar-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <button class="btn btn-light" onclick="window.location.href='/shop/list'">首页</button>
+                    </li>
+                    <li class="nav-item dropdown open">
+                        <button class="btn btn-light dropdown-toggle" type="button"  id="dropdownMenu1">
+                            商品类型
+                        </button>
+                    </li>
+                    <li class="nav-item" th:if="${session.buyer}!=null">
+                        <button class="btn btn-light"　 onclick="window.open('/buyer/orderAdmin')">订单管理</button>
+                    </li>
+                    <li class="nav-item" th:if="${session.buyer}!=null">
+                        <button class="btn btn-light" onclick="window.open('/address/selectAddress')">收货信息管理</button>
+                    </li>
+                    <li class="nav-item" th:if="${session.buyer}!=null">
+                        <button class="btn btn-primary" onclick="$('.card-wrap').show();$('#update').addClass('is-show');">修改个人信息</button>
+                    </li>
+                    <li class="nav-item" th:if="${session.buyer}!=null">
+                        <button class="btn btn-secondary" onclick="window.open('/buyer/cartAdmin')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                            </svg>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <form class="form-inline">
+                <img th:if="${session.buyer}!=null and ${session.buyer.imgPath}!=null" th:src="${session.buyer.imgPath}" th:alt="头像" style="width: 50px;height: 50px;border-radius: 50%" />
+                <img th:if="${session.buyer}!=null and ${session.buyer.imgPath}==null" th:src="@{static/img/default.jpg}" th:alt="头像" style="width: 50px;height: 50px;border-radius: 50%" />
+                <input class="form-control  w-75 p-3" type="search" placeholder="请输入商品关键字" aria-label="Search" name="keyword">
+                <button class="btn btn-outline-success my-2 my-sm-0">S</button>
+            </form>
+            <button class="btn btn-success"  id="openWin">登录</button>
+        </nav>
+        <div class="card-wrap">
+            <div class="card border-0 shadow card--welcome is-show" id="welcome">
+                <div class="card-body">
+                    <h2 class="card-title">欢迎你的使用</h2>
+                    <p>请点击按钮</p>
+                    <div class="btn-wrap"><a class="btn btn-lg btn-register js-btn" data-target="register">注册</a><a class="btn btn-lg btn-login js-btn" data-target="login">登录</a></div>
+                    <button class="btn btn-info"　 onclick="$('.card-wrap').hide();">关闭</button>
+                </div>
+            </div>
+            <div class="card border-0 shadow card--register" id="register">
+                <div class="card-body">
+                    <h2 class="card-title">账号注册</h2>
+                    <form id="reg" enctype="multipart/form-data" method="post" onsubmit="return false;">
+                        <div class="upload-pic">
+                            <div>
+                                <img th:src="@{static/img/default.jpg}" alt="选择并上传头像" id="head_portrait" />
+                                <input type="file" id="head_portrait_file" name="pic_path" accept="image/*"  />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <span  id="rUsernameMsg"></span>
+                            <input class="form-control" type="text" placeholder="用户名" name="username" id="regUsername" />
+                        </div>
+                        <div class="form-group">
+                            <span  id="rPasswordMsg"></span>
+                            <input class="form-control" type="password" placeholder="密码" name="password" id="regPassword" />
+                        </div>
+                        <div class="form-group">
+                            <span  id="rPhoneMsg"></span>
+                            <input class="form-control" type="number" placeholder="手机号码" name="phonenumber" id="regPhonenumber" />
+                        </div>
+                        <div class="form-group">
+                            <span  id="rRealnameMsg"></span>
+                            <input class="form-control" type="text" placeholder="姓名" name="realname" id="regRealname" />
+                        </div>
+                        <div class="form-group">
+                            <span  id="rNicknameMsg"></span>
+                            <input class="form-control" type="text" placeholder="昵称" name="nickname" id="regNickname" />
+                        </div>
+                        <button class="btn btn-lg" id="reg_btn">注册</button>
+                        <button class="btn btn-info"　 onclick="$('.card-wrap').hide();">关闭</button>
+                    </form>
+                </div>
+                <button class="btn btn-back js-btn" data-target="welcome"><i class="fas fa-angle-left"></i></button>
+            </div>
+            <div class="card border-0 shadow card--login" id="login">
+                <div class="card-body">
+                    <h2 class="card-title">账号登录</h2>
+                    <form id="log"  method="post" onsubmit="return false">
+                        <div class="form-group">
+                            <span id="lg_username"></span>
+                            <input class="form-control" type="text" placeholder="用户名" name="username" id="loginUserName" />
+                        </div>
+                        <div class="form-group">
+                            <span id="lg_password"></span>
+                            <input class="form-control" type="password" placeholder="密码" name="password" id="loginPassWord" />
+                        </div>
+                        <p><a class="js-btn btn-find" data-target="find">忘记密码</a></p>
+                        <button class="btn btn-lg" id="log_btn">登录</button>
+                        <button class="btn btn-info"　 onclick="$('.card-wrap').hide();">关闭</button>
+                    </form>
+                </div>
+                <button class="btn btn-back js-btn" data-target="welcome"><i class="fas fa-angle-left"></i></button>
+            </div>
+            <div class="card border-0 shadow card--find" id="find">
+                <div class="card-body">
+                    <h2 class="card-title">请输入用户名、手机号和姓名</h2>
+                    <form id="findForm"  method="post" onsubmit="return false">
+                        <div class="form-group">
+                            <span id="fUsernameMsg"></span>
+                            <input class="form-control" type="text" placeholder="用户名" name="username" id="findUserName" />
+                        </div>
+                        <div class="form-group">
+                            <span id="fPhonenumberMsg"></span>
+                            <input class="form-control" type="number" placeholder="手机号码" name="phonenumber" id="findPhonenumber" />
+                        </div>
+                        <div class="form-group">
+                            <span id="fRealnameMsg"></span>
+                            <input class="form-control" type="text" placeholder="姓名" name="realname" id="findRealname" />
+                        </div>
+                        <div class="form-group">
+                            <span id="fNewPasswordMsg"></span>
+                            <input class="form-control" type="password" placeholder="新密码" name="password" id="findPassword" />
+                        </div>
+                        <button class="btn btn-lg" id="changePassword">更改密码</button>
+                        <button class="btn btn-info"　 onclick="$('.card-wrap').hide();">关闭</button>
+                    </form>
+                </div>
+                <button class="btn btn-back js-btn" data-target="login"><i class="fas fa-angle-left"></i></button>
+            </div>
+            <div class="card border-0 shadow card--update" id="update">
+                <div class="card-body">
+                    <h2 class="card-title">信息修改</h2>
+                    <form id="upd" enctype="multipart/form-data" method="post" onsubmit="return false;">
+                        <div class="upload-pic">
+                            <div th:if="${session.buyer}!=null">
+                                <img th:if="${session.buyer}!=null and ${session.buyer.imgPath}!=null" th:src="${session.buyer.imgPath}" th:alt="选择并上传头像" th:id="newHead_portrait" />
+                                <img th:if="${session.buyer}!=null and ${session.buyer.imgPath}==null" th:src="@{static/img/default.jpg}" th:alt="选择并上传头像" th:id="newHead_portrait" />
+                                <input type="file" th:id="newHead_portrait_file" name="pic_path" accept="image/*"  />
+                            </div>
+                            <div th:if="${session.buyer}==null">
+                                <img th:if="${session.buyer}==null" th:src="@{static/img/default.jpg}"  th:alt="选择并上传头像" th:id="newHead_portrait" />
+                                <input type="file" th:id="newHead_portrait_file" name="pic_path" accept="image/*"  />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <span id="newPasswordmsg"></span>
+                            <input class="form-control" type="password" placeholder="新密码" name="password" th:if="${session.buyer}!=null" th:value="${session.buyer.password}" id="updatePassword"/>
+                        </div>
+                        <div class="form-group">
+                            <span  id="newNickMsg"></span>
+                            <input class="form-control" type="text" placeholder="新昵称" name="nickname" th:if="${session.buyer}!=null" th:value="${session.buyer.nickname}" id="updateNickname" />
+                        </div>
+                        <div class="form-group">
+                            <span  id="newPhoneNumberMsg"></span>
+                            <input class="form-control" type="number" placeholder="新手机号" name="phonenumber" th:if="${session.buyer}!=null" th:value="${session.buyer.phonenumber}" id="updatePhonenumber" />
+                        </div>
+                        <button class="btn btn-success" id="updateInfo">修改信息</button>
+                        <button class="btn btn-info"　 onclick="$('.card-wrap').hide();$('#update').removeClass('is-show');">关闭</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="4"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="carousel-item" th:each="product:${pics.list}">
+                    <a th:href="'/shop/showDetail?id='+${product.id}" target="_blank"><img th:src="${product.imgPath}" class="d-block w-100"/></a>
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+    <div class="container">
+        <select id="price">
+            <option>价格排序</option>
+            <option value="asc">价格从小到大</option>
+            <option value="desc">价格从大到小</option>
+        </select>
+        <select id="time">
+            <option>时间排序</option>
+            <option value="desc">时间从新到旧</option>
+            <option value="asc">时间从旧到新</option>
+        </select>
+        <select id="sold">
+            <option>销量排序</option>
+            <option value="asc">销量低到高</option>
+            <option value="desc">销量高到低</option>
+        </select>
+        <div class="row" style="width: 100%;margin:30px  auto">
+            <div class="col-lg-3 col-md-4 col-sm-4 col-6" th:each="product:${pageInfo.list}" style="height: 100%;margin-bottom: 10px;text-align:center;border: 1px solid grey;">
+                <a th:href="'/shop/showDetail?id='+${product.id}" target="_blank">
+                    <img th:src="${product.imgPath}" style="width:100%;height: 160px">
+                    <span th:text="${product.title}" style="width:100%;display:inline-block;color: blue;overflow: hidden;white-space: nowrap;text-overflow: ellipsis"></span><br>
+                    <span th:text="'¥'+${product.price}"></span><br>
+                    <span th:text="'销售量:'+${product.soldCount}"></span><br>
+                    <div><span th:text="'店铺:'+${product.store}" style="color: olive"></span><br><img th:src="${product.sellerImg}" width="30" height="30" style="border-radius: 50%"/> </div>
+                </a>
+            </div>
+        </div>
+        <ul class="pagination">
+            <li th:if="${pageInfo.hasPreviousPage}" th:class="page-item">
+                <a th:href="'/shop/list?pageNum=1&id='+${id}+'&idety='+${idety}+'&keyword='+${keyword}+'&condition='+${condition}+'&sort='+${sort}" th:class="page-link">首页</a>
+            </li>
+            <li class="prev" th:if="${pageInfo.hasPreviousPage}" th:class="page-item">
+                <a th:href="'/shop/list?pageNum='+${pageInfo.prePage}+'&id='+${id}+'&idety='+${idety}+'&keyword='+${keyword}+'&condition='+${condition}+'&sort='+${sort}" th:class="page-link">
+                    前一页
+                </a>
+            </li>
+            <li th:each="nav:${pageInfo.navigatepageNums}" th:class="page-item" th:name="pages">
+                <a th:href="'/shop/list?pageNum='+${nav}+'&id='+${id}+'&idety='+${idety}+'&keyword='+${keyword}+'&condition='+${condition}+'&sort='+${sort}" th:text="${nav}"  th:class="page-link"></a>
+            </li>
+            <li class="next" th:if="${pageInfo.hasNextPage}" th:class="page-item">
+                <a th:href="'/shop/list?pageNum='+${pageInfo.nextPage}+'&id='+${id}+'&idety='+${idety}+'&keyword='+${keyword}+'&condition='+${condition}+'&sort='+${sort}" th:class="page-link">
+                    后一页
+                </a>
+            </li>
+            <li class="page-item">
+                <a th:href="'/shop/list?pageNum='+${pageInfo.pages}+'&id='+${id}+'&idety='+${idety}+'&keyword='+${keyword}+'&condition='+${condition}+'&sort='+${sort}" class="page-link">尾页</a>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<base th:href="@{/}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上架商品</title>
+    <link   rel="stylesheet" href="/static/css/seller/material-design-iconic-font.css" />
+    <link   rel="stylesheet" href="/static/css/seller/jside-menu.css"/>
+    <link   rel="stylesheet" href="/static/css/seller/demo-only.css" />
+    <link   rel="stylesheet" href="/static/css/common/bootstrap.min.css" />
+    <link   rel="stylesheet" href="/static/css/common/summernote-bs4.min.css"/>
+    <link   rel="stylesheet" href="/static/css/seller/product.css"/>
+    <script src="/static/js/common/jquery.min.js"></script>
+    <script src="/static/js/common/popper.min.js"></script>
+    <script src="/static/js/common/bootstrap.min.js"></script>
+    <script src="/static/js/common/jquery.jside.menu.js"></script>
+    <script src="/static/js/seller/nav.js"></script>
+    <script src="/static/js/common/summernote-bs4.min.js"></script>
+    <script src="/static/js/common/editor.js"></script>
+    <script src="/static/js/common/verifyData.js"></script>
+    <script src="/static/js/seller/updateProduct.js"></script>
+    <script src="/static/js/seller/addProduct.js"></script>
+</head>
+<body>
+<div class="container">
+    <menu class="menubar">
+        <menuitem>
+            <button class="menu-trigger"> </button>
+        </menuitem>
+        <menuitem class="logo" title="Your Logo Goes Here">
+            欢迎<span th:text="${session.seller.username}"></span>商家<a href="/seller/logout">退出</a>
+        </menuitem>
+    </menu>
+    <nav th:replace="html/seller/leftnav :: leftnav"></nav>
+    <main>
+        <article>
+            <div class="theme-tray">
+                <div style="width:100%">
+                    <form id="art" enctype="multipart/form-data" >
+                        <input type="hidden" name="sellerId" th:value="${session.seller.id}" th:if="${session.seller}!=null">
+                        <input type="text" class="form-control" name="title" placeholder="商品标题"><span id="titlemsg" class="notice"></span><br/>
+                        <input type="text" class="form-control" name="price" placeholder="价格"><span id="pricemsg" class="notice"></span><br/>
+                        <div class="upload-pic">
+                            <div>
+                                <img src="/static/img/default.jpg" alt="选择并上传图片" id="pic" />
+                                <input type="file" id="mainPic" name="mainPic" accept="image/*"  />
+                            </div>
+                        </div>
+                        <span id="imgmsg" class="notice"></span>
+                        <select name="type_1" id="ty1" class="custom-select">
+                            <option selected>一级分类</option>
+                            <option th:each="oneType,userStat:${oneTypes}" th:value="${oneType.id}" th:text="${oneType.stype}"></option>
+                        </select>
+                        <span id="1msg" class="notice"></span>
+                        <select name="type_2" id="ty2" class="custom-select">
+                            <option selected>二级分类</option>
+                        </select>
+                        <span id="2msg" class="notice"></span>
+                        <select name="type_3" id="ty3" class="custom-select">
+                            <option selected>三级分类</option>
+                        </select>
+                        <span id="3msg" class="notice"></span>
+                        <br>
+                        <input type="hidden" name="sellerId" th:value="${session.seller.id}">
+                        库存:<input type="number" name="stock" class="form-control"/><span id="stockmsg" class="notice"></span><br>
+                        <input type="hidden" name="description" id="con">
+                        <div id="summernote"></div>
+                        <span  id="detailMsg" class="notice"></span>
+                    </form>
+                    <button id="specification" class="btn btn-info">添加规格</button>
+                    <button id="btn1" class="btn btn-primary">上架</button>
+                </div>
+            </div>
+        </article>
+    </main>
+</div>
+</body>
+</html>

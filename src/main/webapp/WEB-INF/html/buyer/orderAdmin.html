@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<base th:href="@{/}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[[${session.buyer.username}]]个人订单管理界面</title>
+    <link   rel="stylesheet" href="/static/css/common/bootstrap.min.css"/>
+    <link   rel="stylesheet" href="/static/css/common/summernote-bs4.min.css">
+    <script src="/static/js/common/jquery.min.js"></script>
+    <script src="/static/js/common/popper.min.js"></script>
+    <script src="/static/js/common/bootstrap.min.js"></script>
+    <script src="/static/js/common/summernote-bs4.min.js"></script>
+    <script src="/static/js/common/editor.js"></script>
+    <script src="/static/js/common/verifyData.js"></script>
+    <script src="/static/js/buyer/orderAdmin.js"></script>
+</head>
+<body>
+  <div class="container">
+      <input type="hidden" id="buyerId" th:value="${session.buyer.id}">
+      <h2>[[${session.buyer.username}]]订单管理</h2>
+      <div class="content"></div>
+      <div class="modal fade" id="detailModal">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h4 class="modal-title">订单详情</h4>
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </div>
+                  <div class="modal-body">
+                      <div style="border: 1px solid red;margin-bottom: 10px">
+                          <div class="store_name" style="border-bottom: 1px solid lightgrey"></div>
+                          <div class="row">
+                              <div class="col-3">
+                                  <img src="" style="width:100%;height: 100%" class="imgPath">
+                              </div>
+                              <div class="col-9">
+                                  <div class="row">
+                                     <div class="title col-9"></div>
+                                      <div class="price col-3" style="color: red"></div>
+                                  </div>
+                                  <div class="row">
+                                      <div class="specification col-9"></div>
+                                      <div class="amount col-3"></div>
+                                  </div>
+                                  <div class="row">
+                                      <div class="status col-3 text-left"></div>
+                                      <div class="total_price col-9 text-right" style="color: red"></div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div style="border-top:1px solid green">
+                          <div style="border-bottom: 1px solid salmon">收货信息</div>
+                          <div class="row">
+                              <div class="col-3">
+                                  <span>收件人:</span>
+                              </div>
+                              <div class="col-9">
+                                  <input type="text" name="recipient" class="recipient">
+                              </div>
+                              <div class="col-3">
+                                  <span>手机号码:</span>
+                              </div>
+                              <div class="col-9">
+                                  <input type="number" name="phonenumber" class="phonenumber">
+                              </div>
+                              <div class="col-3">
+                                  <span>收货地址:</span>
+                              </div>
+                              <div class="col-9">
+                                  <input type="text" name="address" class="address">
+                              </div>
+                              <div class="col-3">
+                                  <span>订单号:</span>
+                              </div>
+                              <div class="col-9">
+                                  <span class="orderId"></span>
+                              </div>
+                              <div class="col-12">
+                                  <div class="msg"></div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" id="close" data-dismiss="modal">关闭</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="modal fade" id="complainModal" tabindex="-1" aria-labelledby="complainModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="complainModalLabel">投诉窗口</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                      <span>投诉原因:</span>
+                      <div id="summernote"　style="width:200px;"></div>
+                  </div>
+                  <div class="modal-footer">
+                      <input type="hidden" name="id" id="oid">
+                      <input type="hidden" name="buyerId" id="sellerId">
+                      <input type="hidden" namr="orderId" id="orderId">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal"　 id="closeWin">关闭</button>
+                      <button type="button" class="btn btn-primary"　  id="com">投诉</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</body>
+</html>

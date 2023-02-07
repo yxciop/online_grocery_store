@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<base th:href="@{/}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商家管理中心</title>
+    <link   rel="stylesheet" href="/static/css/seller/material-design-iconic-font.css" />
+    <link   rel="stylesheet" href="/static/css/seller/jside-menu.css"/>
+    <link   rel="stylesheet" href="/static/css/seller/demo-only.css" />
+    <link    rel="stylesheet" href="/static/css/seller/common.css"/>
+    <link   rel="stylesheet" href="/static/css/common/bootstrap.min.css" />
+    <script src="/static/js/common/jquery.min.js"></script>
+    <script src="/static/js/common/jquery.jside.menu.js"></script>
+    <script src="/static/js/seller/nav.js"></script>
+</head>
+<body>
+<div class="container">
+    <menu class="menubar">
+        <menuitem>
+            <button class="menu-trigger"> </button>
+        </menuitem>
+        <menuitem class="logo" title="Your Logo Goes Here">
+            欢迎<span th:text="${session.seller.username}"></span>商家<a href="/seller/logout">退出</a>
+        </menuitem>
+    </menu>
+    <nav th:replace="html/seller/leftnav :: leftnav"></nav>
+    <main>
+        <article>
+            <div  class="theme-tray">
+                请点击导航栏的菜单按钮
+            </div>
+        </article>
+    </main>
+</div>
+</body>
+</html>

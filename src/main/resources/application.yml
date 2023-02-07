@@ -1,0 +1,54 @@
+server:
+  port: 8848
+  tomcat:
+    uri-encoding: UTF-8
+  servlet:
+    session:
+      timeout: 24h
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+  max-http-header-size: 102400
+spring:
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java #重启目录
+      exclude: /WEB-INF/**
+  freemarker:
+    cache: false
+  thymeleaf:
+    cache: false
+  application:
+    name: online_grocery_store
+  datasource:
+    url: jdbc:mysql://localhost:3306/grocery_store?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+    username: root
+    password: 12345678
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 50MB
+  resources:
+    static-locations: classpath:/static/
+  mvc:
+    static-path-pattern: /static/**
+logging:
+  pattern:
+    file: myLog.log
+  level:
+    cn.bdqn.myappproject.dao: debug
+mybatis:
+  configuration:
+    auto-mapping-behavior: full
+  type-aliases-package: cn.letao.online_grocery_store.pojo
+  mapper-locations: classpath:mappers/*.xml
+  configuration-properties:
+    offsetAsPageNum: true
+    rowBoundsWithCount: true
+    resonable: true
+
+
+

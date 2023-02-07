@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.letao.online_grocery_store.dao.FlowMapper">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from flow
+    where out_trade_no=#{out_trade_no}
+  </delete>
+  <insert id="insert" parameterType="Flow">
+    insert into flow (id,trade_no,out_trade_no,
+      paid_amount,created_time)
+    values (#{id},#{trade_no},#{out_trade_no},
+            #{paid_amount},#{created_time})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="Flow">
+    update flow
+    <trim prefix="set" suffixOverrides=",">
+      <if test="paid_amount!=null">
+        paid_amount=paid_amount-#{paid_amount},
+      </if>
+      <if test="id!=null and id!=''">
+        id=#{id},
+      </if>
+    </trim>
+    where out_trade_no = #{out_trade_no}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultType="Flow">
+    select *
+    from flow
+    where out_trade_no = #{out_trade_no} limit 1
+  </select>
+</mapper>

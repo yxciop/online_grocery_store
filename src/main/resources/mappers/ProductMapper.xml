@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace指定对应的接口类-->
+<mapper namespace="cn.letao.online_grocery_store.dao.ProductMapper">
+    <insert id="addProduct" parameterType="Product">
+        insert into product(title,imgPath,imgPhysicalPath,type_1,type_2,type_3,
+                            price,stock,createdTime,modifyTime,sellerId,
+                            description,status,soldCount,dimension)
+        values (#{title},#{imgPath},#{imgPhysicalPath},#{type_1},#{type_2},#{type_3},
+                #{price},#{stock},now(),now(),
+                #{sellerId},#{description},'未审核',0,#{dimension})
+    </insert>
+    <select id="queryProducts" parameterType="Product" resultType="Product">
+        select p.*,s.store_name as store,s.imgPath as sellerImg
+        from product p,seller s
+        <where>
+            p.sellerId=s.id
+            and p.status='审核过' and s.status!='封号'
+            <if test="title != null and title != ''">
+                AND p.title like concat('%','${title}','%')
+            </if>
+            <if test="type_1 != null">
+                AND p.type_1=#{type_1}
+            </if>
+            <if test="type_2 != null">
+                AND p.type_2=#{type_2}
+            </if>
+            <if test="type_3 != null">
+                AND p.type_3=#{type_3}
+            </if>
+        </where>
+        <if test="condition=='modify' and sort=='up'">
+            order by p.modifyTime
+        </if>
+        <if test="condition=='modify' and sort=='down'">
+            order by p.modifyTime desc
+        </if>
+        <if test="condition=='price' and sort=='up'">
+            order by p.price
+        </if>
+        <if test="condition=='price' and sort=='down'">
+            order by p.price desc
+        </if>
+        <if test="condition=='sold' and sort=='up'">
+            order by p.soldCount
+        </if>
+        <if test="condition=='sold' and sort=='down'">
+            order by p.soldCount desc
+        </if>
+    </select>
+    <select id="selectUnreviewedProducts" parameterType="Integer" resultType="Product">
+        select p.*,s.store_name as store from product p,seller s
+        where p.sellerId=s.id  and p.status='未审核'
+        <if test="cout!=null">
+        and p.msg='请审核' order by p.modifyTime desc limit #{cout}
+         </if>
+    </select>
+    <select id="selectSellerProduct" parameterType="Integer" resultType="Product">
+        select p.*,s.store_name as store from product p,seller s
+        where  p.sellerId=#{sellerId} and p.sellerId=s.id order by soldCount desc
+    </select>
+    <select id="selectProductDetail"  parameterType="Product" resultType="Product">
+        select p.*,s.store_name as store,s.address as address,s.phonenumber as phonenumber
+        from product p,seller s
+        <where>
+            p.sellerId=s.id
+            <if test="id != null">
+                AND p.id=#{id}
+            </if>
+            <if test="type_1!=null">
+                AND p.type_1=#{type_1}
+            </if>
+            <if test="type_2!=null">
+                AND p.type_2=#{type_2}
+            </if>
+            <if test="type_3!=null">
+                AND p.type_3=#{type_3}
+            </if>
+        </where>
+        limit 1
+    </select>
+    <update id="updateProduct" parameterType="Product">
+        update product
+        <trim prefix="set" suffixOverrides=",">
+            <if test="title!=null and title!=''">
+                title=#{title},
+            </if>
+            <if test="type_1!=null">
+                type_1=#{type_1},
+            </if>
+            <if test="type_2!=null">
+                type_2=#{type_2},
+            </if>
+            <if test="type_3!=null">
+                type_3=#{type_3},
+            </if>
+            <if test="price!=null">
+                price=#{price},
+            </if>
+            <if test="stock!=null">
+                stock=#{stock},
+            </if>
+            <if test="imgPath!=null and imgPath!=''">
+                imgPath=#{imgPath},
+            </if>
+            <if test="imgPhysicalPath!=null and imgPhysicalPath!=''">
+                imgPhysicalPath=#{imgPhysicalPath},
+            </if>
+                modifyTime=now(),
+            <if test="description!=null and description!=''">
+                description=#{description},
+            </if>
+            <if test="status!=null and status!=''">
+                status=#{status},
+            </if>
+            <if test="msg!=null">
+                msg=#{msg},
+            </if>
+            <if test="soldCount!=null">
+                soldCount=soldCount+#{soldCount},
+            </if>
+            <if test="dimension!=null and dimension!=''">
+                dimension=#{dimension},
+            </if>
+        </trim>
+        where id=#{id}
+    </update>
+    <update id="subtractStock">
+        update product set stock=stock-#{amount} where id=#{id}
+    </update>
+    <delete id="delProduct" parameterType="Integer">
+        delete from product where id=#{id}
+    </delete>
+</mapper>

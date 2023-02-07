@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<base th:href="@{/}">
+<head>
+<meta charset="utf-8">
+<title>商品详情</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link   rel="stylesheet" href="/static/css/shop/detail.css">
+    <script src="/static/js/common/jquery.min.js"></script>
+    <script src="/static/js/common/jquery.Spinner.js"></script>
+</head>
+<body class="body_color">
+<div class="mall_main">
+    <input type="hidden" id="buyerid" th:if="${session.buyer}!=null" th:value="${session.buyer.id}">
+	<div id="banner_box" class="box_swipe">
+		<ul>
+            <li th:each="pic:${pictures}"><img th:src="${pic}"></li>
+		</ul>
+		<ol id="in">
+            <li th:each="pic,iterStat : ${pictures}"></li>
+		</ol>
+	</div>
+    <div class="des_goods">
+        <p th:text="${pro.title}"> </p>
+        <p><span class="pr">价格</span><span class="sp_style3" th:text="'¥'+${pro.price}"></span></p>
+        <hr/>
+        <div class="goods_activity">
+            <p>
+                <span class="pr">规格</span>
+                <label th:each="dimension,status : ${#strings.arraySplit(pro.dimension, ',')}" th:if="${pro.dimension}!=null or ${pro.dimension}!=''">
+                    <input type="radio" th:value="${dimension}" name="specification">
+                    [[${dimension}]]
+                </label>
+            </p>
+            <p>
+                <span>地址:[[${pro.address}]]</span><br>
+                <span>商家电话:[[${pro.phonenumber}]]</span>
+            </p>
+            <p>
+                <a th:href="'/shop/storeProduct?sellerId='+${pro.sellerId}">店铺:[[${pro.store}]]</a>
+            </p>
+            <div class="num">
+                <span>数量</span>
+                <span id="a" class="Spinner"></span>
+                <span th:text="'库存:'+${pro.stock}"></span>
+            </div>
+        </div>
+    </div>
+    <div class="box_list">
+        <ul class="box_nav">
+            <li class="current"><a>商品详情</a></li>
+        </ul>
+        <div class="goods_box" th:utext="${pro.description}">
+        </div>
+    </div>
+    <form id="fo">
+        <input type="hidden" name="sellerId" th:value="${pro.sellerId}" id="sellerid">
+        <input type="hidden" name="product_id" th:value="${pro.id}"  id="productid">
+        <input type="hidden" name="amount">
+        <input type="hidden" name="specification">
+    </form>
+    <div class="bottomdiv clearfix">
+        <div class="inner clearfix">
+            <div class="fl btn_sure buy">
+                <a>立即购买</a>
+            </div>
+            <div class="fl btn_buy_detail">
+                <a class="addshop_cat">加入购物车</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/js/shop/swipe2.js"></script>
+<script src="/static/js/shop/detail.js"></script>
+</body>
+</html>

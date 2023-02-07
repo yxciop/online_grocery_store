@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace指定对应的接口类-->
+<mapper namespace="cn.letao.online_grocery_store.dao.AddressMapper">
+    <select id="queryAddress"  resultType="Address">
+        select * from address
+        <where>
+            <if test="buyerId != null">
+                AND buyerId=#{buyerId}
+            </if>
+            <if test="isDefault != null">
+                AND isDefault=#{isDefault}
+            </if>
+        </where>
+    </select>
+    <insert id="addAddress" parameterType="Address">
+        insert into address
+    (buyerId,rname,phonenumber,address,isDefault,createdTime,modifyTime) values
+    (#{buyerId},#{rname},#{phonenumber},#{address},
+     #{isDefault},now(),now())
+    </insert>
+    <update id="updateAddress" parameterType="Address">
+        update address
+        <trim prefix="set" suffixOverrides=",">
+            <if test="rname!=null and rname!=''">
+                rname=#{rname},
+            </if>
+            <if test="phonenumber!=null and phonenumber!=''">
+                phonenumber=#{phonenumber},
+            </if>
+            <if test="address!=null and address!=''">
+                address=#{address},
+            </if>
+            <if test="isDefault!=null">
+                isDefault=#{isDefault},
+            </if>
+            modifyTime=now()
+        </trim>
+        <where>
+            <if test="id != null">
+                AND id=#{id}
+            </if>
+            <if test="buyerId != null">
+                AND buyerId=#{buyerId}
+            </if>
+        </where>
+    </update>
+    <delete id="delAddress" parameterType="Integer">
+        delete from address where id=#{id}
+    </delete>
+    <select id="queryAddressByID" parameterType="Integer" resultType="Address">
+        select * from address where id=#{id}  limit 1
+    </select>
+</mapper>

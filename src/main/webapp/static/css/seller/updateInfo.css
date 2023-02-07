@@ -1,0 +1,29 @@
+.container{
+    width: 95%;
+}
+span{
+    font-size:18px;
+}
+.upload-pic>div{
+    position: relative;
+    width: 100px;
+    height:100px;
+}
+#head_portrait{
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    left:0px;
+    top:0px;
+}
+#head_portrait_file{
+    position: absolute;
+    width: 100%;
+    height:100%;
+    opacity: 0;
+    left:0;
+    top: 0;
+}
+font{
+    color: red;
+}

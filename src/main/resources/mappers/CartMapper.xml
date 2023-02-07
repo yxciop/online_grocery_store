@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace指定对应的接口类-->
+<mapper namespace="cn.letao.online_grocery_store.dao.CartMapper">
+    <select id="selectCartList" parameterType="Integer" resultType="Cart">
+        select c.*,p.title as title,p.price as price,p.imgPath as imgPath,p.dimension as dimension,
+               s.store_name  as store_name,s.address as address
+        from cart c,seller s,product p
+        where p.id=c.product_id and s.id=c.sellerId
+              and c.buyerId=#{buyerId} order by c.sellerId desc
+    </select>
+    <select id="selectLikeCart"  resultType="Cart">
+        select * from cart
+        where product_id=#{pid} and buyerId=#{buyerId}
+        and  specification=#{spe}
+        limit 1
+    </select>
+    <select id="ByArrayQueryCartList" resultType="Cart">
+        select c.*,p.title as title,p.price as price,p.imgPath as imgPath,p.dimension as dimension,s.store_name  as store_name
+        from cart c,seller s,product p
+        <where>
+            p.id=c.product_id and s.id=c.sellerId
+                and c.id in
+                <foreach item="ids" index="index" collection="array" open="("  close=")" separator=",">
+                    #{ids}
+                </foreach>
+        </where>
+    </select>
+    <insert id="addCart" parameterType="Cart">
+        insert into cart(buyerId,product_id,amount,sellerId,specification)
+        values (#{buyerId},#{product_id},#{amount},#{sellerId},#{specification})
+    </insert>
+    <update id="updateAmount">
+        update cart set amount=#{amount} where id=#{id}
+    </update>
+    <update id="updateSpecification">
+        update cart set specification=#{specification} where id=#{id}
+    </update>
+    <delete id="delCart">
+        delete from cart where id=#{id}
+    </delete>
+    <delete id="delByProduct_id">
+        delete from cart where product_id=#{product_id}
+    </delete>
+</mapper>

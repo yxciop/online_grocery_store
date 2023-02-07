@@ -1,0 +1,6 @@
+.pagination{
+    overflow: auto;
+}
+tr{
+    border-bottom: 2px solid red;
+}

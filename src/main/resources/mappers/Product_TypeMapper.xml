@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace指定对应的接口类-->
+<mapper namespace="cn.letao.online_grocery_store.dao.Product_TypeMapper">
+   <select id="getProductTypes" resultType="Product_Type" parameterType="Integer">
+      select * from product_type
+      <where>
+         <if test="parentId != null">
+            AND parentId=#{parentId}
+         </if>
+      </where>
+   </select>
+   <select id="queryTypeById" resultType="String" parameterType="Integer">
+      select stype from product_type where id=#{id}
+   </select>
+   <select id="getTypesDetail" resultType="Product_Type">
+      select s.*,p.stype as parentType from product_type s,product_type p where s.parentId=p.id
+   </select>
+   <insert id="addProductType" parameterType="Product_Type">
+      insert into product_type(stype,parentId,soncode,idety)
+      values (#{stype},#{parentId},0,#{idety})
+   </insert>
+   <update id="updateProductTypeSoncode" parameterType="Product_Type">
+      update product_type set soncode=#{soncode} where id=#{id}
+   </update>
+   <delete id="deleteType" parameterType="Integer">
+      delete from product_type where id=#{id}
+   </delete>
+</mapper>

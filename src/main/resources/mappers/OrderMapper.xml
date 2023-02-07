@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace指定对应的接口类-->
+<mapper namespace="cn.letao.online_grocery_store.dao.OrderMapper">
+    <select id="queryOrders" parameterType="Order" resultType="Order">
+        select o.*,p.imgPath as imgPath,s.store_name as store_name
+        from `order` o,product p,seller s
+        <where>
+            o.product_id=p.id and o.sellerId=s.id
+            <if test="buyerId!=null">
+                and o.buyerId=#{buyerId}
+            </if>
+            <if test="buyerId==null">
+                and o.buyerId != 0
+            </if>
+            <if test="sellerId!=null">
+                AND o.sellerId=#{sellerId}
+            </if>
+            <if test="orderId!=null and orderId!=''">
+                AND o.orderId=#{orderId}
+            </if>
+            <if test="id!=null">
+                AND o.id=#{id}
+            </if>
+        </where>
+    </select>
+    <select id="queryProductOrderByProduct_id" resultType="Order">
+        select * from `order` where `order`.product_id=#{product_id} and `order`.status='未发货' limit 1
+    </select>
+    <select id="queryOrderDetailById" resultType="Order">
+        select * from `order` where `order`.id=#{id} limit 1
+    </select>
+    <select id="selectUndisposedOrder" resultType="Order">
+        SELECT  o.*,b.username as buyerAccount,s.username as sellerAccount
+            from `order` o,buyer b,seller s
+        where  (o.buyerId=b.id and o.sellerId=s.id) and (o.status="退款中" or
+        o.status="退款失败" or o.status="已接受订单" or o.status="催促退款")
+    </select>
+    <update id="updateOrder" parameterType="Order">
+        update `order`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="phonenumber!=null and phonenumber!=''">
+                `order`.phonenumber=#{phonenumber},
+            </if>
+            <if test="address!=null and address!=''">
+                `order`.address=#{address},
+            </if>
+            <if test="status!=null and status!=''">
+                `order`.status=#{status},
+            </if>
+            <if test="recipient!=null and recipient!=''">
+                `order`.recipient=#{recipient},
+            </if>
+            <if test="msg!=null">
+                msg=#{msg},
+            </if>
+            <if test="buyerId==0">
+                `order`.buyerId=0,
+            </if>
+            <if test="sellerId==0">
+                `order`.sellerId=0,
+            </if>
+            modifyTime=now()
+        </trim>
+        <where>
+            <if test="id!=null">
+                and `order`.id=#{id}
+            </if>
+            <if test="orderId!=null and orderId!=''">
+                and `order`.orderId=#{orderId}
+            </if>
+        </where>
+    </update>
+    <update id="updateOrderId">
+        update `order` set  `order`.orderId=#{newOrderId} where `order`.id=#{id}
+    </update>
+    <insert id="addOrder" parameterType="Order">
+        insert into `order`
+        (`order`.orderId,`order`.price,`order`.productname,
+         `order`.buyerId,`order`.sellerId,`order`.phonenumber,
+         `order`.address,`order`.status,`order`.createdTime,
+         `order`.modifyTime,`order`.recipient,`order`.specification,`order`.amount,`order`.product_id,`order`.total_price) values
+        (#{orderId},#{price},#{productname},#{buyerId},
+         #{sellerId},#{phonenumber},#{address},#{status},now(),now(),#{recipient},#{specification},#{amount},#{product_id},#{total_price})
+    </insert>
+    <insert id="insertOrders" parameterType="java.util.List" useGeneratedKeys="false">
+        insert into `order`
+        (`order`.orderId,`order`.price,`order`.productname,
+        `order`.buyerId,`order`.sellerId,`order`.phonenumber,
+        `order`.address,`order`.status,`order`.createdTime,
+        `order`.modifyTime,`order`.recipient,`order`.specification,
+         `order`.amount,`order`.product_id,`order`.total_price)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.orderId},
+            #{item.price},
+            #{item.productname},
+            #{item.buyerId},
+            #{item.sellerId},
+            #{item.phonenumber},
+            #{item.address},
+            #{item.status},
+            now(),
+            now(),
+            #{item.recipient},
+            #{item.specification},
+            #{item.amount},
+            #{item.product_id},
+            #{item.total_price}
+            )
+        </foreach>
+    </insert>
+    <delete id="deleteOrder">
+        delete from `order` where `order`.id=#{id}
+    </delete>
+</mapper>

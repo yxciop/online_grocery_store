@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<base th:href="@{/}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[[${storename}]]店铺商品</title>
+    <link rel="stylesheet" href='/static/css/common/bootstrap.min.css'>
+    <link rel="stylesheet" href='/static/css/shop/store-product.css'>
+    <script src="/static/js/common/jquery.min.js"></script>
+    <script src="/static/js/common/popper.min.js"></script>
+    <script src="/static/js/common/bootstrap.min.js"></script>
+    <script src="/static/js/shop/storeProduct.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="alert alert-primary" role="alert">
+        联系方式:[[${phonenumber}]]
+    </div>
+    <div class="alert alert-success" role="alert">
+        商家地址:[[${address}]]
+    </div>
+    <div id="demo" class="carousel slide" data-ride="carousel">
+        <ul class="carousel-indicators">
+            <li data-target="#demo" data-slide-to="0" class="active"></li>
+            <li data-target="#demo" data-slide-to="1"></li>
+            <li data-target="#demo" data-slide-to="2"></li>
+        </ul>
+        <div class="carousel-inner">
+            <div class="carousel-item" th:each="product:${pics.list}">
+                <img th:src="${product.imgPath}" />
+            </div>
+        </div>
+        <a class="carousel-control-prev" href="#demo" data-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </a>
+        <a class="carousel-control-next" href="#demo" data-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </a>
+    </div>
+    <div class="row" style="width: 100%;margin:30px  auto">
+        <div class="col-lg-4 col-md-4 col-sm-4 col-6" th:each="product:${pageInfo.list}" style="height: 100%;margin-bottom: 10px;text-align:center;border: 1px solid gold;">
+            <a th:href="'/shop/showDetail?id='+${product.id}">
+                <img th:src="${product.imgPath}" style="width:100%;height: 160px">
+                <span th:text="${product.title}"  style="width:100%;display:inline-block;color: green;overflow: hidden;white-space: nowrap;text-overflow: ellipsis"></span><br>
+                <span th:text="'¥'+${product.price}" class="text-danger"></span><br>
+                <span th:text="'销售量:'+${product.soldCount}" class="text-muted"></span><br>
+            </a>
+        </div>
+    </div>
+    <ul class="pagination">
+        <li th:if="${pageInfo.hasPreviousPage}" th:class="page-item">
+            <a th:href="'/shop/storeProduct?sellerId='+${sellerId}+'&pageNum=1" th:class="page-link">首页</a>
+        </li>
+
+        <li class="prev" th:if="${pageInfo.hasPreviousPage}" th:class="page-item">
+            <a th:href="'/shop/storeProduct?sellerId='+${sellerId}+'&pageNum='+${pageInfo.prePage}" th:class="page-link">
+                前一页
+            </a>
+        </li>
+        <li th:each="nav:${pageInfo.navigatepageNums}" th:class="page-item" th:name="pages">
+            <a th:href="'/shop/storeProduct?sellerId='+${sellerId}+'&pageNum='+${nav}" th:text="${nav}"  th:class="page-link"></a>
+        </li>
+
+        <li class="next" th:if="${pageInfo.hasNextPage}" th:class="page-item">
+            <a th:href="'/shop/storeProduct?sellerId='+${sellerId}+'&pageNum='+${pageInfo.nextPage}" th:class="page-link">
+                后一页
+            </a>
+        </li>
+        <li class="page-item">
+            <a th:href="'/shop/storeProduct?sellerId='+${sellerId}+'&pageNum='+${pageInfo.pages}" class="page-link">尾页</a>
+        </li>
+    </ul>
+    <button type="button" class="btn btn-info return" onclick="history.go(-1)">返回</button>
+</div>
+</body>
+</html>

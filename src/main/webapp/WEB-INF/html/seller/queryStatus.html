@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<base th:href="@{/}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>状态信息</title>
+    <link    rel="stylesheet" href="/static/css/seller/material-design-iconic-font.css" />
+    <link    rel="stylesheet" href="/static/css/seller/jside-menu.css"/>
+    <link    rel="stylesheet" href="/static/css/seller/demo-only.css" />
+    <link    rel="stylesheet" href="/static/css/common/bootstrap.min.css" />
+    <link    rel="stylesheet" href="/static/css/common/summernote-bs4.min.css"/>
+    <link    rel="stylesheet" href="/static/css/seller/common.css"/>
+    <script  src="/static/js/common/jquery.min.js"></script>
+    <script  src="/static/js/common/popper.min.js"></script>
+    <script  src="/static/js/common/bootstrap.min.js"></script>
+    <script  src="/static/js/common/jquery.jside.menu.js"></script>
+    <script  src="/static/js/seller/nav.js"></script>
+    <script  src="/static/js/common/summernote-bs4.min.js"></script>
+    <script  src="/static/js/common/editor.js"></script>
+    <script  src="/static/js/seller/queryStatus.js"></script>
+</head>
+<body>
+<div class="container">
+    <menu class="menubar">
+        <menuitem>
+            <button class="menu-trigger"> </button>
+        </menuitem>
+        <menuitem class="logo" title="Your Logo Goes Here">
+            欢迎<span th:text="${session.seller.username}"></span>商家<a href="/seller/logout">退出</a>
+        </menuitem>
+    </menu>
+    <nav th:replace="html/seller/leftnav :: leftnav"></nav>
+    <main>
+        <article>
+            <div  class="theme-tray">
+                <span>账户状态:</span><span th:if="${session.seller.status}!='正常'" th:class="red" th:text="${session.seller.status}"></span>
+                <span th:if="${session.seller.status}=='正常'" th:class="green" th:text="${session.seller.status}"></span><br>
+                <span>账户反馈信息:</span><span th:if="${session.seller.msg} eq null or ${session.seller.msg} eq ''">无</span>
+                <div th:if="${session.seller.msg} ne '' and ${session.seller.msg} ne null" th:utext="*{session.seller.msg}"></div><br>
+                <span th:if="${session.seller.msg} ne '' and ${session.seller.msg} ne null">证明信息:</span>
+                <div th:if="${session.seller.msg}  ne '' and ${session.seller.msg} ne null" th:id="summernote"></div>
+                <button th:if="${session.seller.msg} ne '' and ${session.seller.msg} ne null" class="btn btn-success" id="btn1">申诉</button>
+            </div>
+        </article>
+    </main>
+</div>
+</body>
+</html>

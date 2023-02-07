@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<base th:href="@{/}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商家登录中心</title>
+    <link   rel="stylesheet" href="/static/css/common/bootstrap.min.css">
+    <link   rel="stylesheet" href="/static/css/seller/LoginAndRegister.css">
+    <link   rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
+    <script src="/static/js/common/jquery.min.js"></script>
+    <script src="/static/js/common/verifyData.js"></script>
+    <script src="/static/js/seller/sellerLogin.js"></script>
+</head>
+<body>
+<div class="section">
+    <div class="container">
+        <div class="row full-height justify-content-center">
+            <div class="col-12 text-center align-self-center py-5">
+                <div class="section pb-5 pt-5 pt-sm-2 text-center">
+                    <h6 class="mb-0 pb-3"><span>登录</span><span>注册</span></h6>
+                    <input class="checkbox" type="checkbox" id="reg-log" name="reg-log" />
+                    <label for="reg-log" id="login"></label>
+                    <div class="card-3d-wrap mx-auto">
+                        <div class="card-3d-wrapper">
+                            <div class="card-front">
+                                <div class="center-wrap">
+                                    <div class="section text-center">
+                                        <h4 class="mb-4 pb-3">登录</h4>
+                                        <form  id="logForm">
+                                            <font id="login_msg" th:text="${login_msg}"></font>
+                                            <div class="form-group">
+                                                <span th:text="${login_username_msg}" id="logU"></span>
+                                                <input type="text" name="username" class="form-style" placeholder="用户名"  autocomplete="off">
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <span th:text="${login_password_msg}" id="logP"></span>
+                                                <input type="password" name="password" class="form-style" placeholder="密码"  autocomplete="off">
+                                            </div>
+                                        </form>
+                                        <button  class="btn mt-4" id="log">登录</button>
+                                        <p class="mb-0 mt-4 text-center"><a  class="link" href="/seller/tofind" target="_blank">忘记密码</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-back">
+                                <div class="center-wrap">
+                                    <div class="section text-center">
+                                        <span th:text="${reg_msg}" id="msg"></span>
+                                        <h4 class="mb-4 pb-3">注册</h4>
+                                        <form id="reg"  enctype="multipart/form-data">
+                                            <div class="upload-pic form-group">
+                                                <div>
+                                                    <img th:src="@{static/img/default.jpg}" alt="选择并上传头像" id="head_portrait" />
+                                                    <input type="file" id="head_portrait_file" name="pic_path" accept="image/*"  />
+                                                </div>
+                                            </div>
+                                            <span id="img_msg"></span>
+                                            <div class="form-group">
+                                                <input type="text" name="username" class="form-style" placeholder="用户名"  autocomplete="off">
+                                                <span th:text="${username_msg}" id="username_msg"></span>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <input type="password" name="password" class="form-style" placeholder="密码"  autocomplete="off">
+                                                <span id="password_msg"></span>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <input type="text" name="store_name" class="form-style" placeholder="商店名称"  autocomplete="off">
+                                                <span th:text="${storeName_msg}" id="storeName_msg"></span>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <input type="number" name="phonenumber" class="form-style" placeholder="手机号码"   autocomplete="off">
+                                                <span th:text="${phone_msg}" id="phone_msg"></span>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <input type="address" name="address" class="form-style" placeholder="地址"  autocomplete="off">
+                                                <span  id="address_msg"></span>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <input type="text" name="realname" class="form-style" placeholder="姓名" autocomplete="off">
+                                                <span id="realname_msg"></span>
+                                            </div>
+                                        </form>
+                                        <button class="btn mt-4" id="register">注册</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace指定对应的接口类-->
+<mapper namespace="cn.letao.online_grocery_store.dao.BuyerMapper">
+   <insert id="register" parameterType="Buyer">
+      insert into buyer
+      <trim prefix="(" suffix=")" suffixOverrides="," >
+         username,password,phonenumber,nickname,realname,
+         <if test="imgPath!=null and imgPath!=''" >
+            imgPath,
+         </if>
+         <if test="imgPhysicalPath!=null and imgPhysicalPath!=''" >
+            imgPhysicalPath,
+         </if>
+         roleId,status,loginStatus
+      </trim>
+      <trim prefix="values (" suffix=")" suffixOverrides="," >
+         #{username},#{password},#{phonenumber},#{nickname},#{realname},
+         <if test="imgPath!=null and imgPath!=''" >
+            #{imgPath},
+         </if>
+         <if test="imgPhysicalPath!=null and imgPhysicalPath!=''" >
+            #{imgPhysicalPath},
+         </if>
+         1,'正常','logout'
+      </trim>
+   </insert>
+   <select id="queryBuyer" parameterType="BuyerVo" resultType="Buyer">
+      select * from buyer
+      <where>
+         <if test="username != null and username != ''">
+           AND username=#{username}
+         </if>
+         <if test="password != null and password != ''">
+            AND password =#{password}
+         </if>
+         <if test="phonenumber != null and phonenumber != ''">
+            AND  phonenumber=#{phonenumber}
+         </if>
+      </where>
+      limit 1
+   </select>
+   <select id="selectBuyerMsg" parameterType="java.lang.Integer" resultType="java.lang.String">
+      select  msg from buyer where id=#{id}
+   </select>
+   <update id="updateBuyer" parameterType="Buyer">
+      update buyer
+      <trim prefix="set" suffixOverrides=",">
+         <if test="password!=null and password!=''">
+            password=#{password},
+         </if>
+         <if test="phonenumber!=null and phonenumber!=''">
+            phonenumber=#{phonenumber},
+         </if>
+         <if test="nickname!=null and nickname!=''">
+            nickname=#{nickname},
+         </if>
+         <if test="imgPath!=null and imgPath!=''">
+            imgPath=#{imgPath},
+         </if>
+         <if test="imgPhysicalPath!=null and imgPhysicalPath!=''">
+            imgPhysicalPath=#{imgPhysicalPath},
+         </if>
+         <if test="loginStatus!=null and loginStatus!=''">
+            loginStatus=#{loginStatus},
+         </if>
+         <if test="status!=null and status!=''">
+            status=#{status},
+         </if>
+         <if test="msg!=null">
+            msg=#{msg},
+         </if>
+      </trim>
+      where id=#{id} 
+   </update>
+   <delete id="delBuyer" parameterType="Integer">
+      delete from buyer where id=#{id}
+   </delete>
+   <select id="queryAbnormalUser" resultType="Buyer">
+      select * from buyer where status !='正常'
+   </select>
+</mapper>

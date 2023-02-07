@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<base th:href="@{/}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>卖家订单处理界面</title>
+    <link   rel="stylesheet" href="/static/css/seller/material-design-iconic-font.css" />
+    <link   rel="stylesheet" href="/static/css/seller/jside-menu.css"/>
+    <link   rel="stylesheet" href="/static/css/seller/demo-only.css" />
+    <link   rel="stylesheet" href="/static/css/common/bootstrap.min.css" />
+    <link   rel="stylesheet" href="/static/css/common/summernote-bs4.min.css">
+    <script src="/static/js/common/jquery.min.js"></script>
+    <script src="/static/js/common/popper.min.js"></script>
+    <script src="/static/js/common/bootstrap.min.js"></script>
+    <script src="/static/js/common/jquery.jside.menu.js"></script>
+    <script src="/static/js/common/summernote-bs4.min.js"></script>
+    <script src="/static/js/common/editor.js"></script>
+    <script src="/static/js/seller/nav.js"></script>
+    <script src="/static/js/seller/orderDispose.js"></script>
+</head>
+<body>
+<div class="container">
+    <menu class="menubar">
+        <menuitem>
+            <button class="menu-trigger"> </button>
+        </menuitem>
+        <menuitem class="logo" title="Your Logo Goes Here">
+            欢迎<span th:text="${session.seller.username}"></span>商家<a href="/seller/logout">退出</a>
+        </menuitem>
+    </menu>
+    <nav th:replace="html/seller/leftnav :: leftnav"></nav>
+    <main>
+        <article>
+            <div  class="theme-tray">
+                <input type="hidden" id="sellerId" th:value="${session.seller.id}" th:if="${session.seller}!=null">
+                <div class="content">
+                </div>
+                <ul class="pagination" id="btnlist" style="margin-top: 20px">
+                </ul>
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top: 30px">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="exampleModalLabel">客户订单详情</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label>收件人:</label>
+                                        <input type="text" name="recipient" class="recipient" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>手机号码:</label>
+                                        <input type="number" name="phonenumber" class="phonenumber" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>地址:</label>
+                                        <input type="text" name="address" class="address" style="width: 400px" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>订单号:</label>
+                                        <span class="orderId"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>订单信息:</label>
+                                        <span class="msg"></span>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="complainModal" tabindex="-1" aria-labelledby="complainModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="complainModalLabel">投诉窗口</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <span>投诉原因:</span>
+                                <div id="summernote"　style="width:200px;"></div>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="hidden" name="id" id="oid">
+                                <input type="hidden" name="buyerId" id="buyerId">
+                                <input type="hidden" namr="orderId" id="orderid">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal"　 id="closeWin">关闭</button>
+                                <button type="button" class="btn btn-primary"　  id="com">投诉</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </main>
+</div>
+</body>
+</html>

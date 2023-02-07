@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace指定对应的接口类-->
+<mapper namespace="cn.letao.online_grocery_store.dao.AdminMapper">
+    <select id="queryAdmin" parameterType="Admin" resultType="Admin">
+        select * from admin
+        <where>
+            <if test="username != null and username != ''">
+                AND username=#{username}
+            </if>
+            <if test="password != null and password != ''">
+                AND password =#{password}
+            </if>
+        </where>
+        limit 1
+    </select>
+    <update id="updateStatus" parameterType="Admin">
+        update admin
+        set loginStatus=#{loginStatus}
+        where id=#{id}
+    </update>
+</mapper>
